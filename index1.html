@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mylove</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mali&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: white;
+            overflow-x: hidden;
+            position: relative;
+            transition: background-color 0.8s ease;
+        }
+
+        #fixed-area {
+            width: 350px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #main-img {
+            width: 350px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #text {
+            margin-top: 20px;
+            font-size: 28px;
+            text-align: center;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 700;
+            color: #333333;
+            text-shadow: 1px 1px 0 #e4e4e4;
+            white-space: nowrap;
+        }
+
+        #button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        #yes-btn {
+            background: linear-gradient(45deg, #4CAF50, #81C784);
+            box-shadow: 0 4px 10px rgba(72, 180, 97, 0.6);
+            transition: all 0.3s ease;
+            font-size: 16px;
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            animation: jump 3s ease-in-out infinite;
+        }
+
+        #yes-btn:hover {
+            background: linear-gradient(45deg, #388E3C, #66BB6A);
+            box-shadow: 0 6px 14px rgba(56, 142, 60, 0.8);
+        }
+
+        #no-btn {
+            background: linear-gradient(45deg, #E53935, #EF9A9A);
+            box-shadow: 0 4px 10px rgba(229, 57, 53, 0.6);
+            transition: all 0.3s ease;
+            font-size: 16px;
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+        }
+
+        #no-btn:hover {
+            background: linear-gradient(45deg, #B71C1C, #E57373);
+            box-shadow: 0 6px 14px rgba(183, 28, 28, 0.8);
+        }
+
+        @keyframes jump {
+
+            0%,
+            25%,
+            75%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .falling-text {
+            position: fixed;
+            top: -10vh;
+            font-family: 'Mali', cursive;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+            color: #ff6f6f;
+            text-shadow:
+                0 0 5px #9eb5ff;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10vh;
+            }
+
+            100% {
+                top: 100vh;
+            }
+        }
+
+        @keyframes starBlink {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="fixed-area">
+        <img id="main-img" src="./assets/images/1.gif" alt="Hình ảnh" />
+        <div id="text">Có quà nè thanh!</div> <!-- Sửa lời nhắn chính ở đây -->
+    </div>
+
+    <div id="button-container">
+        <button id="yes-btn">Bấm vô đây nè hehe</button> <!-- Nút xác nhận đồng ý -->
+    
+    </div>
+    <div id="particles-js"></div>
+
+    <script>
+        const textElement = document.getElementById('text');
+        const yesBtn = document.getElementById('yes-btn');
+        
+        const imgElement = document.getElementById('main-img');
+        const buttonContainer = document.getElementById('button-container');
+
+
+        let noClickCount = 0;
+        let yesFontSize = 16;
+
+       
+
+        yesBtn.addEventListener('click', () => {
+            textElement.style.display = "none";
+            console.log("Yes button clicked");
+            imgElement.style.display = "none";
+            buttonContainer.style.display = "none";
+
+            document.body.style.backgroundColor = "";
+
+            let starBackground = document.getElementById("star-background");
+            if (!starBackground) {
+                starBackground = document.createElement("div");
+                starBackground.id = "star-background";
+                document.body.appendChild(starBackground);
+
+                Object.assign(starBackground.style, {
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "100vh",
+                    backgroundColor: "rgba(18, 18, 18, 0.95)",
+                    zIndex: "-1",
+                    pointerEvents: "none",
+                    overflow: "hidden"
+                });
+
+                const starCount = 80;
+                for (let i = 0; i < starCount; i++) {
+                    const star = document.createElement("div");
+                    star.className = "star";
+                    starBackground.appendChild(star);
+
+                    const size = Math.random() * 2 + 1 + "px";
+                    const left = Math.random() * 100 + "vw";
+                    const top = Math.random() * 100 + "vh";
+                    const delay = Math.random() * 3 + "s";
+                    const duration = (Math.random() * 2 + 1) + "s";
+                    star.style.cssText = `
+        position: absolute;
+        width: ${size};
+        height: ${size};
+        background: white;
+        border-radius: 50%;
+        left: ${left};
+        top: ${top};
+        opacity: 0;
+        animation: starBlink ${duration} ease-in-out infinite;
+        animation-delay: ${delay};
+      `;
+                }
+            }
+
+            //Sửa lời nhắn hiển thị chữ rơi ở đây
+            const fallingWords = ["🎂", "Happy Birthday ", "Chúc mừng sinh nhật Thanh 🌽", "zuiiii zẻ "];
+
+            const layers = [
+                { fontSize: 32, opacity: 1, duration: 4, positions: [] },
+                { fontSize: 24, opacity: 0.8, duration: 5, positions: [] },
+                { fontSize: 20, opacity: 0.7, duration: 6, positions: [] },
+                { fontSize: 16, opacity: 0.6, duration: 7, positions: [] },
+                { fontSize: 12, opacity: 0.5, duration: 8, positions: [] }
+            ];
+
+            function isPositionValid(positions, left) {
+                return positions.every(pos => Math.abs(pos - left) > 8);
+            }
+
+            const interval = setInterval(() => {
+                const span = document.createElement("span");
+                span.className = "falling-text";
+                span.textContent = fallingWords[Math.floor(Math.random() * fallingWords.length)];
+
+                const layerIndex = Math.floor(Math.random() * layers.length);
+                const layer = layers[layerIndex];
+
+                let left;
+                let attempts = 0;
+                do {
+                    left = Math.random() * 100;
+                    attempts++;
+                    if (attempts > 30) break;
+                } while (!isPositionValid(layer.positions, left));
+
+                layer.positions.push(left);
+
+                span.style.left = left + "vw";
+                span.style.fontSize = layer.fontSize + "px";
+                span.style.opacity = layer.opacity;
+                span.style.animationDuration = layer.duration + "s";
+                span.style.transformStyle = "preserve-3d";
+
+                document.body.appendChild(span);
+
+                setTimeout(() => {
+                    span.remove();
+                    const index = layer.positions.indexOf(left);
+                    if (index > -1) {
+                        layer.positions.splice(index, 1);
+                    }
+                }, layer.duration * 1000 + 500);
+            }, 100);
+        });
+
+    </script>
+</body>
+
+</html>
+
+
+
+<!--nhạc-->
+
+
+
+<body id="playBtn">
+    <audio id="audio" src="nhac.mp3"></audio>
+    <canvas id="c" width="948" height="586"></canvas>
+ 
+    <script src="script.js"> </script>
+    <script>
+        document.body.addEventListener("click", function () {
+            var audio = document.getElementById("audio");
+            audio.play();
+        });
+    </script>
+
+</body>
+
+<!--nhạc-->
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Báo Chúc Mừng Sinh Nhật</title>
+    <style>
+        /* Toàn bộ trang */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Đảm bảo chiều cao của body đầy đủ */
+            display: flex;
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+        }
+
+        /* Thông báo sinh nhật với nền trong suốt */
+        .birthday-notification {
+            background-color: rgba(240, 119, 204, 0.7); /* Nền hồng với độ trong suốt */
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Thêm bóng đổ nhẹ */
+            display: none; /* Mặc định ẩn */
+            z-index: 9999;
+            position: absolute;
+            max-width: 400px; /* Giới hạn độ rộng của thông báo */
+            width: 90%; /* Chiếm 90% chiều rộng màn hình */
+            text-align: center; /* Căn giữa nội dung */
+        }
+
+        /* Nút đóng thông báo */
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1px; /* Tăng kích thước của dấu '×' */
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10000; /* Đảm bảo nút đóng hiển thị ở trên thông báo */
+        }
+
+        .close-btn:hover {
+            color: #FFD700; /* Màu vàng khi hover */
+        }
+
+        /* Hiệu ứng thông báo */
+        .show-notification {
+            display: block;
+            animation: slideIn 1s ease-out;
+        }
+
+        /* Hiệu ứng trượt thông báo */
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Hiệu ứng gõ chữ */
+        .typing {
+            display: inline-block;
+            width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid #fff; /* Màu của con trỏ */
+            animation: typing 4s steps(100) 1s forwards, blink 0.75s step-end infinite;
+        }
+
+        /* Animation gõ chữ */
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        /* Hiệu ứng nháy con trỏ */
+        @keyframes blink {
+            0% {
+                border-color: transparent;
+            }
+            50% {
+                border-color: white;
+            }
+            100% {
+                border-color: transparent;
+            }
+        }
+
+        /* Chỉnh sửa chữ cho màu trắng và căn giữa */
+        #message {
+            color: white; /* Đặt màu chữ thành trắng */
+            font-size: 18px; /* Chỉnh lại kích thước chữ nếu cần */
+            text-align: center; /* Căn giữa nội dung */
+            margin: 0; /* Xóa bỏ margin mặc định */
+            white-space: pre-wrap; /* Cho phép xuống dòng tự động */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Thông báo sinh nhật -->
+    <div id="birthdayNotification" class="birthday-notification">
+        <button class="close-btn" onclick="closeNotification()">&times;</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // Hàm mở thông báo
+        function showNotification() {
+            const notification = document.getElementById('birthdayNotification');
+            notification.classList.add('show-notification');
+            typeWriter(); // Hiệu ứng gõ chữ
+        }
+
+        // Hàm đóng thông báo
+        function closeNotification() {
+            const notification = document.getElementById('birthdayNotification');
+            notification.classList.remove('show-notification');
+        }
+
+        // Hàm tạo hiệu ứng gõ chữ
+        function typeWriter() {
+            const text = `Hy vọng ngày hôm nay cũng đặc biệt như chính con người bạn.
+                          Sinh nhật ấm áp và an lành nhé! 
+                          Sinh nhật vui vẻ. 
+                          Chúc bạn luôn may mắn và thành công trong mọi lĩnh vực của cuộc sống. 
+                          Chúc mọi điều ước, hoài bão của bạn đều trở thành hiện thực, lúc nào cũng vui vẻ, tràn ngập tiếng cười, yêu đời và ngời ngời sức sống.`;
+            let i = 0;
+            const messageElement = document.getElementById('message');
+            messageElement.classList.add('typing'); // Thêm class để tạo hiệu ứng
+
+            function typingEffect() {
+                if (i < text.length) {
+                    messageElement.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typingEffect, 100); // Đặt khoảng thời gian giữa các ký tự
+                }
+            }
+
+            typingEffect(); // Bắt đầu hiệu ứng
+        }
+
+        // Tự động hiển thị thông báo khi trang được tải xong
+        window.onload = function() {
+            setTimeout(showNotification, 5000); // Hiển thị thông báo sau 500ms
+        };
+    </script>
+
+</body>
+</html>

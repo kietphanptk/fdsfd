@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>em có điều muốm nói </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #90dd81;
+        }
+        .container {
+            text-align: center;
+            background: rgb(236, 148, 225);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(219, 209, 68, 0.1);
+        }
+        input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #004aeb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Mật khẩu ngày tháng hôm nay nha thanh </h2>
+        <input type="password" id="passwordInput" placeholder="Nhập mật khẩu">
+        <div class="error" id="errorMessage"></div>
+        <button id="unlockButton">Mở khóa</button>
+    </div>
+
+    <script>
+        // Danh sách mật khẩu hợp lệ
+        const validPasswords = ["0408","48","04/08"]; // Thay đổi mật khẩu tùy ý
+        const redirectURL = "index1.html"; // Thay URL đích (trang web chuyển đến)
+        const passwordInput = document.getElementById('passwordInput');
+        const unlockButton = document.getElementById('unlockButton');
+        const errorMessage = document.getElementById('errorMessage');
+
+        unlockButton.addEventListener('click', () => {
+            const enteredPassword = passwordInput.value;
+            if (validPasswords.includes(enteredPassword)) {
+                window.location.href = redirectURL; // Chuyển đến URL nếu đúng mật khẩu
+            } else {
+                errorMessage.textContent = 'Mật khẩu không đúng, vui lòng thử lại!';
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
